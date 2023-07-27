@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "remove_inv"
+version = "0.1.0"
+description = ""
+authors = ["Shahmi Majid"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+selenium = "^4.10.0"
+logging = "^0.4.9.6"
+python-dotenv = "^1.0.0"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
