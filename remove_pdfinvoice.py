@@ -39,6 +39,8 @@ order_url = wp_url + "/wp-admin/post.php?post={}&action=edit"
 # WebDriver option setup
 chrome_options = Options()
 chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome(options=chrome_options)
 
 ##### Selenium tasks ####
@@ -128,6 +130,8 @@ with open(orders_list, "r") as file:
                 except NoSuchElementException:
                     print("Element not found.")
                     logging.info("Element not found")
+                    sleep(randint(4,7)) # Let the user actually see something!
+                    logging.info("Delay to avoid banned between 4-7 sec randomly ")
                     continue
             else:
                 # Handle the error (e.g., print an error message)
@@ -146,104 +150,3 @@ with open(orders_list, "r") as file:
 
 
 
-
-
-
-
-
-
-
-
-#---------
-##### Selenium tasks ####
-# Open the WordPress admin login page
-driver.get(admin_url)
-
-# Log an informational message
-logging.info(f"Open wp admin: {admin_url}")
-
-# Login wp-admin
-driver.find_element(By.NAME,"log").send_keys(username)
-driver.find_element(By.NAME,"pwd").send_keys(password)
-
-# Log an informational message
-logging.info(f"Entered username: {username}")
-
-# Login submit
-driver.find_element(By.XPATH, "//input[@type='submit']").click()
-
-# Log an informational message
-logging.info(f"Logged in")
-
-# Delay between 3-6 second before proceed next action
-sleep(randint(4,7)) # Let the user actually see something!
-
-# Check if the checkpoint file exists
-if os.path.exists(checkpoint_file):
-    with open(checkpoint_file, "r") as file:
-        last_processed_line = int(file.read())
-else:
-    last_processed_line = 0
-
-# Open the input data file
-with open(orders_list, "r") as file:
-    # Skip the lines that have already been processed
-    for _ in range(last_processed_line):
-        next(file)
-
-    # Loop through the remaining lines
-    for line_number, line in enumerate(file, start=last_processed_line + 1):
-        # Process the line data
-        line = line.strip()
-        # ...
-
-        try:
-            # Construct the URL or perform other actions based on the line data
-            url = order_url.format(line)
-
-            # Send a HEAD request to check the response status code
-            response = requests.head(url)
-
-            # Check if the response code is 302 (OK)
-            if response.status_code == 302:
-                # Navigate to the URL using Selenium
-                driver.get(url)
-                print(f"Order no: {line}")
-                #Show Order no processed
-                logging.info("Order ID : %s", line)
-
-                try:
-                    # get element
-                    element = driver.find_element(By.XPATH, "//a[@class='wcj_need_confirmation' and text()='Delete']")
-
-                    # Get the href value
-                    href = element.get_attribute("href")
-                    print(f"Found element with href: {href}")
-
-                    # Log an informational message
-                    logging.info(f"Element: {href}")
-
-                    # Combine the relative URL with the base URL
-                    full_url = urljoin(wp_url, href)
-
-                    #Perform GET to delete pdf invoice
-                    driver.get(full_url)
-                    logging.info("URL is %s ", full_url)
-
-                except NoSuchElementException:
-                    print("Element not found.")
-                    logging.info("Element not found")
-                    continue
-            else:
-                # Handle the error (e.g., print an error message)
-                print(f"Error occurred while navigating to order id : {line}. Response code: {response.status_code}")
-                # Continue to the next iteration
-                continue
-
-        except requests.RequestException as e:
-            # Handle the error (e.g., print an error message)
-            print(f"Error occurred while sending request to order {line}: {str(e)}")
-            logging.info("Error {str(e)}")
-
-            # Continue to the next iteration
-            continue
