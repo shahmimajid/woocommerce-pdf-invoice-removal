@@ -63,8 +63,8 @@ driver.find_element(By.XPATH, "//input[@type='submit']").click()
 # Log an informational message
 logging.info(f"Logged in")
 
-# Delay between 3-6 second before proceed next action
-sleep(randint(4,7)) # Let the user actually see something!
+# Delay between 10-15 second before proceed next action
+sleep(randint(10,15)) # Let the user actually see something!
 
 
 # Check if the checkpoint file exists
