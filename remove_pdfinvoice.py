@@ -130,6 +130,11 @@ with open(orders_list, "r") as file:
                 except NoSuchElementException:
                     print("Element not found.")
                     logging.info("Element not found")
+                    
+                    # Update the checkpoint file with the current line number
+                    with open(cp_file, "w") as checkpoint:
+                        checkpoint.write(str(line_number))
+                    
                     sleep(randint(4,7)) # Let the user actually see something!
                     logging.info("Delay to avoid banned between 4-7 sec randomly ")
                     continue
