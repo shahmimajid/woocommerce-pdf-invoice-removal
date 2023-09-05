@@ -96,6 +96,6 @@ Automation using selenium to remove PDF invoice and credit note
 
     If the metadata and invNo Values is exactly the same, whenever you run, it will ***DO NOTHING*** in the output.
 
-    > If an Order is not yet generated invoice and /or credit note, you will need to generate it first then run the script to update accordingly
+    > If an Order is not yet generated invoice and /or credit note, you will need to generate it first then run the script to update accordingly. Else, it won't reflected into the PDF Invoices as no reference that script can use to update the value.
 
     > Somehow when we update the order, then we rerun again the same command, it will still showing output as *** Action performed!*** eventhough we already did. I'm not so sure what is happening due to caching issue or what, but you can proceed with next order as it already update. If you check in Order detail from UI, the update already reflected.
