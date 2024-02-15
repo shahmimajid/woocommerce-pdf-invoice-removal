@@ -48,9 +48,12 @@ driver.get(ezbiz_url)
 # Log an informational message
 logging.info(f"Open EZBIZ Registration: {ezbiz_url}")
 
-# Select the dropdown option with value "01"
-#id_type_dropdown = Select(driver.find_element_by_name("idType"))
-#id_type_dropdown.select_by_value("01")
+# Find the dropdown element
+id_type_dropdown = driver.find_element(By.NAME, "idType")
+
+# Create a Select object and select the option with value "01"
+select = Select(id_type_dropdown)
+select.select_by_value("01")
 
 # Login wp-admin
 driver.find_element(By.NAME,"idNo").send_keys(ic_no)
@@ -61,13 +64,17 @@ logging.info(f"Entered IC no: {ic_no}")
 logging.info(f"Entered Name: {name}")
 
 # Login submit
-#driver.find_element_by_css_selector("input[value='Register']").click()
+driver.find_element(By.XPATH, "//input[@type='submit']").click()
+
+# Submit the form
+#submit_button = driver.find_element_by_css_selector("input[value='Register']")
+#submit_button.click()
 
 # Log an informational message
 logging.info(f"Checked")
 
 # # Delay between 10-15 second before proceed next action
-sleep(randint(5,10)) # Let the user actually see something!
+sleep(randint(15,30)) # Let the user actually see something!
 
 # Close the browser
 driver.quit()
