@@ -55,7 +55,7 @@ id_type_dropdown = driver.find_element(By.NAME, "idType")
 select = Select(id_type_dropdown)
 select.select_by_value("01")
 
-# Login wp-admin
+# Send details
 driver.find_element(By.NAME,"idNo").send_keys(ic_no)
 driver.find_element(By.NAME,"name").send_keys(name)
 
@@ -63,7 +63,7 @@ driver.find_element(By.NAME,"name").send_keys(name)
 logging.info(f"Entered IC no: {ic_no}")
 logging.info(f"Entered Name: {name}")
 
-# Login submit
+# Submit form to register
 driver.find_element(By.XPATH, "//input[@type='submit']").click()
 
 # Submit the form
@@ -71,10 +71,29 @@ driver.find_element(By.XPATH, "//input[@type='submit']").click()
 #submit_button.click()
 
 # Log an informational message
-logging.info(f"Checked")
+logging.info(f"Form Submitted")
+
+#wait after submit form
+sleep(randint(5,10)) # Let the user actually see something!
+
+#Check error
+# Check if the element with the text exists
+try:
+    error_element = driver.find_element(By.XPATH, "//span[@class='feedbackPanelERROR' and contains(., 'User already registered')]")
+    print("Found the element with 'User already registered'")
+    # You can perform further actions with the element here
+except NoSuchElementException:
+    print("Element with 'User already registered' not found")
+
+#Get Redirect URL
+currentURL = driver.current_url
+logging.info(f"Error Element: {error_element} ")
+logging.info(f"Current URL: {currentURL} ")
+print(error_element)
+print(driver.current_url)
 
 # # Delay between 10-15 second before proceed next action
-sleep(randint(15,30)) # Let the user actually see something!
+sleep(randint(20,30)) # Let the user actually see something!
 
 # Close the browser
 driver.quit()
